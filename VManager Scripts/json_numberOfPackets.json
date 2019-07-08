@@ -129360,3 +129360,57 @@
         "destPort": 61625
     }
 }
+
+================================================================================
+alarmClosed Packets: 0
+
+alarmOpened Packets: 0
+
+apStateChanged Packets: 0
+
+cmdFinished Packets: 0
+
+configChanged Packets: 0
+
+configDeleted Packets: 0
+
+configLoaded Packets: 0
+
+configRestored Packets: 0
+
+dataPacketReceived Packets: 9911
+
+deviceHealthReport Packets: 162
+
+discoveryHealthReport Packets: 326
+
+invalidMIC Packets: 0
+
+ipPacketReceived Packets: 0
+
+joinFailed Packets: 0
+
+managerStarted Packets: 0
+
+managerStopping Packets: 0
+
+moteStateChanged Packets: 0
+
+neighborHealthReport Packets: 155
+
+optPhase Packets: 2
+
+packetSent Packets: 0
+
+pathAlert Packets: 1
+
+pathStateChanged Packets: 1136
+
+pingResponse Packets: 0
+
+rawMoteNotification Packets: 162
+
+serviceChanged Packets: 0
+
+================================================================================
+Total Packets: 11856
