@@ -22,6 +22,8 @@ import base64
 import certifi
 import json
 import datetime
+from datetime import datetime
+import time, threading
 
 # generic SmartMeshSDK imports
 from SmartMeshSDK                      import sdk_version
@@ -34,12 +36,13 @@ from VManagerSDK.vmanager              import SystemWriteConfig
 #============================ defines =========================================
 
 DFLT_VMGR_HOST           = "128.93.102.105"
-
 urllib3.disable_warnings() # disable warnings that show up about self-signed certificates
 
 #============================ variables =======================================
-line_counter = 1
-global_counter = [0]*25
+
+line_counter = 1         
+global_counter = [0]*25     # counts the number of packetsfor each notification
+period_call_counter = 1
 
 #============================ helpers =========================================
 def process_alarmClosed(mydata):
@@ -49,20 +52,24 @@ def process_alarmClosed(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[0] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
     
     data = {
         mydata.type: {
-            "sysTime": list(mydata.sys_time),
+            "Time": time_str,
+            "sysTime": mydata.sys_time,
             "alarmType": mydata.alarm_type,
             "type": mydata.type
             }
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_alarmOpened(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -71,20 +78,24 @@ def process_alarmOpened(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[1] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S') 
 
     data = {
         mydata.type: {
-            "sysTime": list(mydata.sys_time),
+            "Time": time_str,
+            "sysTime": mydata.sys_time,
             "alarmType": mydata.alarm_type,
             "type": mydata.type
             }
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_apStateChanged(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -93,10 +104,13 @@ def process_apStateChanged(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[2] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S') 
 
     data = {
         mydata.type: {
-            "sysTime": list(mydata.sys_time),
+            "Time": time_str,
+            "sysTime": mydata.sys_time,
             "reason": mydata.reason,
             "state": mydata.state,
             "macAddress": mydata.mac_address,
@@ -105,10 +119,11 @@ def process_apStateChanged(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_cmdFinished(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -117,10 +132,13 @@ def process_cmdFinished(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[3] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S') 
 
     data = {
         mydata.type: {
-            "sysTime": list(mydata.sys_time),
+            "Time": time_str,
+            "sysTime": mydata.sys_time,
             "callbackId": mydata.callback_id,
             "resultCode": mydata.result_code,
             "type": mydata.type
@@ -128,10 +146,11 @@ def process_cmdFinished(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_configChanged(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -140,20 +159,24 @@ def process_configChanged(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[4] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')  
 
     data = {
         mydata.type: {
-            "sysTime": list(mydata.sys_time),
+            "Time": time_str,
+            "sysTime": mydata.sys_time,
             "module": mydata.module,
             "type": mydata.type
             }
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_configDeleted(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -162,20 +185,24 @@ def process_configDeleted(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[5] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S') 
 
     data = {
         mydata.type: {
-            "sysTime": list(mydata.sys_time),
+            "Time": time_str,
+            "sysTime": mydata.sys_time,
             "module": mydata.module,
             "type": mydata.type
             }
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_configLoaded(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -184,20 +211,24 @@ def process_configLoaded(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[6] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')  
 
     data = {
         mydata.type: {
-            "sysTime": list(mydata.sys_time),
+            "Time": time_str,
+            "sysTime": mydata.sys_time,
             "module": mydata.module,
             "type": mydata.type
             }
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_configRestored(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -206,9 +237,12 @@ def process_configRestored(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[7] += 1
-
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
+    
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "module": mydata.module,
             "type": mydata.type
@@ -216,21 +250,25 @@ def process_configRestored(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
                 
 def process_dataPacketReceived(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
+    global line_counter, global_counter, time, time_str
         
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
-    global_counter[8] += 1
+    global_counter[8] += 1   
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
     
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "macAddress": mydata.mac_address,
             "Latency": mydata.latency,
@@ -244,21 +282,25 @@ def process_dataPacketReceived(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
-
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
+    
 def process_deviceHealthReport(mydata):
     '''Process data notifications from HealthReport'''
     global line_counter, global_counter
         
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
-    global_counter[9] += 1
+    global_counter[9] =+ 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "badLinkFailures": mydata.bad_link_failures,
             "badLinkFrameId": mydata.bad_link_frame_id,
             "badLinkOffset": mydata.bad_link_offset,
@@ -280,10 +322,11 @@ def process_deviceHealthReport(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_discoveryHealthReport(mydata):
     '''Process data notifications from HealthReport'''
@@ -292,9 +335,12 @@ def process_discoveryHealthReport(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[10] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S') 
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "discoveredNeighbors": mydata.discovered_neighbors,
             "macAddress": mydata.mac_address,
@@ -306,10 +352,11 @@ def process_discoveryHealthReport(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_invalidMIC(mydata):
     '''Process data notifications from HealthReport'''
@@ -318,9 +365,12 @@ def process_invalidMIC(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[11] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "macAddress": mydata.mac_address,
             "type": mydata.type
@@ -328,10 +378,11 @@ def process_invalidMIC(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_ipPacketReceived(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -340,9 +391,12 @@ def process_ipPacketReceived(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[12] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "Latency": mydata.latency,
             "macAddress": mydata.mac_address,
@@ -355,10 +409,11 @@ def process_ipPacketReceived(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_joinFailed(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -367,9 +422,12 @@ def process_joinFailed(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[13] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "reason": mydata.reason,
             "macAddress": mydata.mac_address,
@@ -378,10 +436,11 @@ def process_joinFailed(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_managerStarted(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -390,19 +449,23 @@ def process_managerStarted(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[14] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "type": mydata.type
             }
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_managerStopping(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -411,19 +474,23 @@ def process_managerStopping(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[15] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "type": mydata.type
             }
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_moteStateChanged(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -432,9 +499,12 @@ def process_moteStateChanged(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[16] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "reason": mydata.reason,
             "state": mydata.state,
@@ -444,10 +514,11 @@ def process_moteStateChanged(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_neighborHealthReport(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -456,9 +527,12 @@ def process_neighborHealthReport(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[17] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "connectedNeighbors": mydata.connected_neighbors,
             "macAddress": mydata.mac_address,
@@ -472,10 +546,11 @@ def process_neighborHealthReport(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_optPhase(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -484,9 +559,12 @@ def process_optPhase(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[18] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "type": mydata.type,
             "phase": mydata.phase
@@ -494,10 +572,11 @@ def process_optPhase(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_packetSent(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -506,9 +585,12 @@ def process_packetSent(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[19] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "callbackId": mydata.callback_id,
             "type": mydata.type
@@ -516,10 +598,11 @@ def process_packetSent(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
         
 def process_pathAlert(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -528,9 +611,12 @@ def process_pathAlert(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[20] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "endpointA": mydata.endpoint_a,
             "endpointB": mydata.endpoint_b,
@@ -539,10 +625,11 @@ def process_pathAlert(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_pathStateChanged(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -551,9 +638,12 @@ def process_pathStateChanged(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[21] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "endpointA": mydata.endpoint_a,
             "endpointB": mydata.endpoint_b,
@@ -564,10 +654,11 @@ def process_pathStateChanged(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_pingResponse(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -576,9 +667,12 @@ def process_pingResponse(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[22] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S') 
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "result": mydata.result,
             "latency": mydata.latency,
@@ -592,10 +686,11 @@ def process_pingResponse(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_rawMoteNotification(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -604,9 +699,12 @@ def process_rawMoteNotification(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[23] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S') 
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "payload": mydata.payload,
             "macAddress": mydata.mac_address,
@@ -615,10 +713,11 @@ def process_rawMoteNotification(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
 def process_serviceChanged(mydata):
     '''Process data notifications from dataPacketReceived'''
@@ -627,9 +726,12 @@ def process_serviceChanged(mydata):
     print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
     line_counter += 1
     global_counter[24] += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
 
     data = {
         mydata.type: {
+            "Time": time_str,
             "sysTime": mydata.sys_time,
             "destMacAddress": mydata.dest_mac_address,
             "allocatedPkPeriod": mydata.allocated_pk_period,
@@ -639,11 +741,64 @@ def process_serviceChanged(mydata):
         }
     # Function to handle with datetime
     def myconverter(o):
-        if isinstance(o, datetime.datetime):
+        if isinstance(o, datetime):
             return o.__str__()
     
-    json.dump(data, file, indent=4, default = myconverter)
+    json.dump(data, file, default = myconverter)
+    file.write("\n")
 
+    # This function will be called in a specific period of time  
+def period_call():
+    '''Make a Description ...'''
+    global line_counter, global_counter, period_call_counter
+    
+    print 'Writting Line {0} -- Period Call: {1}\n'.format(line_counter, period_call_counter)
+    line_counter += 1
+    period_call_counter += 1
+    time = datetime.now()
+    time_str = time.strftime('%H:%M:%S')
+    
+    # Get the whole list of motes 
+    mote_list = voyager.motesApi.get_motes()
+
+    # Convert "mote_list" to a dictionary
+    list_of_mote = mote_list.to_dict()
+
+    # ======================= Motes Information =======================
+    file.write('Time :' + time_str)
+    # This loop takes the information concernning each mote
+    for motes in list_of_mote.values():
+       for mac in motes:
+           file.write(mac['mac_address'])
+           mote_info = str(voyager.motesApi.get_mote_info(mac['mac_address']))
+           file.write(mote_info)
+           file.write("\n")
+    
+    threading.Timer(10, period_call).start() # The first parameter is in seconds Ex: 600 = 10 minutes
+    
+    # ========================== Motes Paths ==========================
+
+    file.write('Time :' + time_str)
+    # Get Mote Paths
+    # This loop takes the paths concernning each mote
+    for motes in list_of_mote.values():
+       for mac in motes:
+           file.write('Device -- ' + mac['mac_address'])
+           mote_path = str(voyager.pathsApi.get_connections(mac['mac_address']))
+           file.write(mote_path) # param str mac: MAC Address (required)
+           file.write("\n")
+
+    threading.Timer(10, period_call).start() # The first parameter is in seconds Ex: 600 = 10 minutes     
+    # =================================================================
+    
+    # Function to handle with datetime
+    def myconverter(o):
+        if isinstance(o, datetime):
+            return o.__str__()
+        
+    #threading.Timer(10, period_call).start() # The first parameter is in seconds Ex: 600 = 10 minutes
+
+    
 ########## Process Notif ##########
 def process_notif(notif):
     '''
@@ -857,18 +1012,13 @@ try:
     # Get the whole list of motes 
     mote_list = voyager.motesApi.get_motes()
 
-    # Get Mote Info
-    # mote_info = voyager.motesApi.get_mote_info()
-
-    # for mote in mote_list.motes:
-    #   print mote.mac_address
-
     file = open("json_numberOfPackets.json","w")
     #with open(os.path.join('C:\INRIA-Victor\VManager\Scripts\smartmeshsdk\VManager Data',"teste.txt"), "w") as file:
     print 'Script Created Successfully !'
 
     # Start listening for data notifications
     voyager.get_notifications(notif_callback=process_notif)
+    period_call()
 
     print '\n==== Subscribing to data notifications'
     reply = raw_input ('\n Waiting for notifications from mote, Press any key to stop\n')
@@ -905,6 +1055,7 @@ try:
     print 'pingResponse Packets: {0}\n'.format(global_counter[22])
     print 'rawMoteNotification Packets: {0}\n'.format(global_counter[23])
     print 'serviceChanged Packets: {0}\n'.format(global_counter[24])
+    print 'Period Calls : {0}\n'.format(period_call_counter)
     print '================================================================================'
     print 'Total Packets: {0}\n'.format(line_counter)
  
