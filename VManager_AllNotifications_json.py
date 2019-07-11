@@ -43,761 +43,790 @@ urllib3.disable_warnings() # disable warnings that show up about self-signed cer
 line_counter = 1         
 global_counter = [0]*25     # counts the number of packetsfor each notification
 period_call_counter = 1
+fileLock = threading.RLock()
 
 #============================ helpers =========================================
 def process_alarmClosed(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
+    global line_counter, global_counter, fileLock
+
+    with fileLock:    
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[0] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
         
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[0] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
-    
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "alarmType": mydata.alarm_type,
-            "type": mydata.type
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "alarmType": mydata.alarm_type,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_alarmOpened(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[1] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S') 
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "alarmType": mydata.alarm_type,
-            "type": mydata.type
+    with fileLock:
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[1] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S') 
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "alarmType": mydata.alarm_type,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_apStateChanged(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[2] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S') 
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "reason": mydata.reason,
-            "state": mydata.state,
-            "macAddress": mydata.mac_address,
-            "type": mydata.type
+    with fileLock:
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[2] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S') 
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "reason": mydata.reason,
+                "state": mydata.state,
+                "macAddress": mydata.mac_address,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_cmdFinished(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[3] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S') 
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "callbackId": mydata.callback_id,
-            "resultCode": mydata.result_code,
-            "type": mydata.type
+    with fileLock:
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[3] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S') 
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "callbackId": mydata.callback_id,
+                "resultCode": mydata.result_code,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_configChanged(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[4] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')  
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "module": mydata.module,
-            "type": mydata.type
+    with fileLock:
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[4] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')  
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "module": mydata.module,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_configDeleted(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[5] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S') 
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "module": mydata.module,
-            "type": mydata.type
+    with fileLock:
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[5] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S') 
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "module": mydata.module,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_configLoaded(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[6] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')  
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "module": mydata.module,
-            "type": mydata.type
+    with fileLock:
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[6] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')  
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "module": mydata.module,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_configRestored(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
+    global line_counter, global_counter, fileLock
+
+    with fileLock:
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[7] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
         
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[7] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
-    
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "module": mydata.module,
-            "type": mydata.type
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "module": mydata.module,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
                 
 def process_dataPacketReceived(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter, time, time_str
+    global line_counter, global_counter, time, time_str, fileLock
+
+    with fileLock:    
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[8] += 1   
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
         
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[8] += 1   
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
-    
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "macAddress": mydata.mac_address,
-            "Latency": mydata.latency,
-            "payload": mydata.payload,
-            "genNetTime": mydata.gen_net_time,
-            "macAddress": mydata.mac_address,
-            "destPort": mydata.dest_port,
-            "type": mydata.type,
-            "hops": mydata.hops
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "macAddress": mydata.mac_address,
+                "Latency": mydata.latency,
+                "payload": mydata.payload,
+                "genNetTime": mydata.gen_net_time,
+                "macAddress": mydata.mac_address,
+                "destPort": mydata.dest_port,
+                "type": mydata.type,
+                "hops": mydata.hops
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
     
 def process_deviceHealthReport(mydata):
     '''Process data notifications from HealthReport'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[9] =+ 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "badLinkFailures": mydata.bad_link_failures,
-            "badLinkFrameId": mydata.bad_link_frame_id,
-            "badLinkOffset": mydata.bad_link_offset,
-            "numRxDrop": mydata.num_rx_drop,
-            "macAddress": mydata.mac_address,
-            "numTxFail": mydata.num_tx_fail,
-            "avgQueue": mydata.avg_queue,
-            "type": mydata.type,
-            "numRxOk": mydata.num_rx_ok,
-            "temperature": mydata.temperature,
-            "sysTime": mydata.sys_time,
-            "numTxOk": mydata.num_tx_ok,
-            "charge": mydata.charge,
-            "voltage": mydata.voltage,
-            "badLinkSlot": mydata.bad_link_slot,
-            "numMacDrop": mydata.num_mac_drop,
-            "maxQueue": mydata.max_queue
+    with fileLock:
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[9] =+ 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "badLinkFailures": mydata.bad_link_failures,
+                "badLinkFrameId": mydata.bad_link_frame_id,
+                "badLinkOffset": mydata.bad_link_offset,
+                "numRxDrop": mydata.num_rx_drop,
+                "macAddress": mydata.mac_address,
+                "numTxFail": mydata.num_tx_fail,
+                "avgQueue": mydata.avg_queue,
+                "type": mydata.type,
+                "numRxOk": mydata.num_rx_ok,
+                "temperature": mydata.temperature,
+                "sysTime": mydata.sys_time,
+                "numTxOk": mydata.num_tx_ok,
+                "charge": mydata.charge,
+                "voltage": mydata.voltage,
+                "badLinkSlot": mydata.bad_link_slot,
+                "numMacDrop": mydata.num_mac_drop,
+                "maxQueue": mydata.max_queue
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_discoveryHealthReport(mydata):
     '''Process data notifications from HealthReport'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[10] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S') 
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "discoveredNeighbors": mydata.discovered_neighbors,
-            "macAddress": mydata.mac_address,
-            "type": mydata.type,
-            #"heardCount": mydata.heard_count,
-            #"macAddress": mydata.mac_address,
-            #"rssi": mydata.rssi
+    with fileLock:   
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[10] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S') 
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "discoveredNeighbors": mydata.discovered_neighbors,
+                "macAddress": mydata.mac_address,
+                "type": mydata.type,
+                #"heardCount": mydata.heard_count,
+                #"macAddress": mydata.mac_address,
+                #"rssi": mydata.rssi
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_invalidMIC(mydata):
     '''Process data notifications from HealthReport'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[11] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "macAddress": mydata.mac_address,
-            "type": mydata.type
+    with fileLock: 
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[11] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "macAddress": mydata.mac_address,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_ipPacketReceived(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[12] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "Latency": mydata.latency,
-            "macAddress": mydata.mac_address,
-            "payload": mydata.payload,
-            "genNetTime": mydata.gen_net_time,
-            "macAddress": mydata.mac_address,
-            "type": mydata.type,
-            "hops": mydata.hops
+    with fileLock:  
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[12] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "Latency": mydata.latency,
+                "macAddress": mydata.mac_address,
+                "payload": mydata.payload,
+                "genNetTime": mydata.gen_net_time,
+                "macAddress": mydata.mac_address,
+                "type": mydata.type,
+                "hops": mydata.hops
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_joinFailed(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[13] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "reason": mydata.reason,
-            "macAddress": mydata.mac_address,
-            "type": mydata.type
+    with fileLock:   
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[13] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "reason": mydata.reason,
+                "macAddress": mydata.mac_address,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_managerStarted(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[14] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "type": mydata.type
+    with fileLock:  
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[14] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_managerStopping(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[15] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "type": mydata.type
+    with fileLock:    
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[15] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_moteStateChanged(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[16] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "reason": mydata.reason,
-            "state": mydata.state,
-            "macAddress": mydata.mac_address,
-            "type": mydata.type
+    with fileLock:    
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[16] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "reason": mydata.reason,
+                "state": mydata.state,
+                "macAddress": mydata.mac_address,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_neighborHealthReport(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[17] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "connectedNeighbors": mydata.connected_neighbors,
-            "macAddress": mydata.mac_address,
-            "type": mydata.type,
-            "macAddress": mydata.mac_address,
-            #"numRx": mydata.num_rx,
-            #"numtx": mydata.num_tx,
-            #"numTxFail": mydata.num_tx_fail,
-            #"rssi": mydata.rssi
+    with fileLock:   
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[17] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "connectedNeighbors": mydata.connected_neighbors,
+                "macAddress": mydata.mac_address,
+                "type": mydata.type,
+                "macAddress": mydata.mac_address,
+                #"numRx": mydata.num_rx,
+                #"numtx": mydata.num_tx,
+                #"numTxFail": mydata.num_tx_fail,
+                #"rssi": mydata.rssi
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_optPhase(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[18] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "type": mydata.type,
-            "phase": mydata.phase
+    with fileLock:  
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[18] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "type": mydata.type,
+                "phase": mydata.phase
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_packetSent(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[19] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "callbackId": mydata.callback_id,
-            "type": mydata.type
+    with fileLock:   
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[19] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "callbackId": mydata.callback_id,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
         
 def process_pathAlert(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[20] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "endpointA": mydata.endpoint_a,
-            "endpointB": mydata.endpoint_b,
-            "type": mydata.type
+    with fileLock:    
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[20] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "endpointA": mydata.endpoint_a,
+                "endpointB": mydata.endpoint_b,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_pathStateChanged(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[21] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "endpointA": mydata.endpoint_a,
-            "endpointB": mydata.endpoint_b,
-            "state": mydata.state,
-            "parent": mydata.parent,
-            "type": mydata.type
+    with fileLock:   
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[21] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "endpointA": mydata.endpoint_a,
+                "endpointB": mydata.endpoint_b,
+                "state": mydata.state,
+                "parent": mydata.parent,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_pingResponse(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[22] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S') 
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "result": mydata.result,
-            "latency": mydata.latency,
-            "hopCount": mydata.hop_count,
-            "voltage": mydata.voltage,
-            "callbackId": mydata.callback_id,
-            "macAddress": mydata.mac_address,
-            "type": mydata.type,
-            "temperature": mydata.temperature
+    with fileLock:    
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[22] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S') 
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "result": mydata.result,
+                "latency": mydata.latency,
+                "hopCount": mydata.hop_count,
+                "voltage": mydata.voltage,
+                "callbackId": mydata.callback_id,
+                "macAddress": mydata.mac_address,
+                "type": mydata.type,
+                "temperature": mydata.temperature
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_rawMoteNotification(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[23] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S') 
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "payload": mydata.payload,
-            "macAddress": mydata.mac_address,
-            "type": mydata.type
+    with fileLock:    
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[23] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S') 
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "payload": mydata.payload,
+                "macAddress": mydata.mac_address,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
 def process_serviceChanged(mydata):
     '''Process data notifications from dataPacketReceived'''
-    global line_counter, global_counter
-        
-    print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
-    line_counter += 1
-    global_counter[24] += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
+    global line_counter, global_counter, fileLock
 
-    data = {
-        mydata.type: {
-            "Time": time_str,
-            "sysTime": mydata.sys_time,
-            "destMacAddress": mydata.dest_mac_address,
-            "allocatedPkPeriod": mydata.allocated_pk_period,
-            "sourceMacAddress": mydata.source_mac_address,
-            "type": mydata.type
+    with fileLock:    
+        print 'Writting Line {0} -- Data Notification : {1}\n'.format(line_counter, mydata.type)
+        line_counter += 1
+        global_counter[24] += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+
+        data = {
+            mydata.type: {
+                "Time": time_str,
+                "sysTime": mydata.sys_time,
+                "destMacAddress": mydata.dest_mac_address,
+                "allocatedPkPeriod": mydata.allocated_pk_period,
+                "sourceMacAddress": mydata.source_mac_address,
+                "type": mydata.type
+                }
             }
-        }
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
-    
-    json.dump(data, file, default = myconverter)
-    file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
+        
+        json.dump(data, file, default = myconverter)
+        file.write("\n")
 
-    # This function will be called in a specific period of time  
+# This function will be called in a specific period of time  
 def period_call():
     '''Make a Description ...'''
-    global line_counter, global_counter, period_call_counter
-    
-    print 'Writting Line {0} -- Period Call: {1}\n'.format(line_counter, period_call_counter)
-    line_counter += 1
-    period_call_counter += 1
-    time = datetime.now()
-    time_str = time.strftime('%H:%M:%S')
-    
-    # Get the whole list of motes 
-    mote_list = voyager.motesApi.get_motes()
+    global line_counter, global_counter, period_call_counter, fileLock
 
-    # Convert "mote_list" to a dictionary
-    list_of_mote = mote_list.to_dict()
+    with fileLock:
+        print 'Writting Line {0} -- Period Call: {1}\n'.format(line_counter, period_call_counter)
+        line_counter += 1
+        period_call_counter += 1
+        time = datetime.now()
+        time_str = time.strftime('%H:%M:%S')
+            
+        # Get the whole list of motes 
+        mote_list = voyager.motesApi.get_motes()
 
-    # ======================= Motes Information =======================
-    file.write('Time :' + time_str)
-    # This loop takes the information concernning each mote
-    for motes in list_of_mote.values():
-       for mac in motes:
-           file.write(mac['mac_address'])
-           mote_info = str(voyager.motesApi.get_mote_info(mac['mac_address']))
-           file.write(mote_info)
-           file.write("\n")
-    
-    threading.Timer(10, period_call).start() # The first parameter is in seconds Ex: 600 = 10 minutes
-    
-    # ========================== Motes Paths ==========================
+        # Convert "mote_list" to a dictionary
+        list_of_mote = mote_list.to_dict()
 
-    file.write('Time :' + time_str)
-    # Get Mote Paths
-    # This loop takes the paths concernning each mote
-    for motes in list_of_mote.values():
-       for mac in motes:
-           file.write('Device -- ' + mac['mac_address'])
-           mote_path = str(voyager.pathsApi.get_connections(mac['mac_address']))
-           file.write(mote_path) # param str mac: MAC Address (required)
-           file.write("\n")
+        # Function to handle with datetime
+        def myconverter(o):
+            if isinstance(o, datetime):
+                return o.__str__()
 
-    threading.Timer(10, period_call).start() # The first parameter is in seconds Ex: 600 = 10 minutes     
-    # =================================================================
-    
-    # Function to handle with datetime
-    def myconverter(o):
-        if isinstance(o, datetime):
-            return o.__str__()
+        # Command to write only this file 
         
-    #threading.Timer(10, period_call).start() # The first parameter is in seconds Ex: 600 = 10 minutes
+        print 'Writting Period Call ...'
+        # ======================= Motes Information =======================
+        file.write('Time :' + time_str + '\n')
+            # This loop takes the information concernning each mote
+        for motes in list_of_mote.values():
+           for mac in motes:
+               file.write(mac['mac_address'])
+               mote_info = voyager.motesApi.get_mote_info(mac['mac_address']).to_str()
+               mote_info = mote_info.replace("\n","")
+               file.write(mote_info)
+               file.write("\n")
+                       
+        # ========================== Motes Paths ==========================
+        file.write('Time :' + time_str + '\n')
 
+        # Get Mote Paths
+        # This loop takes the paths concernning each mote
+        for motes in list_of_mote.values():
+           for mac in motes:
+               file.write(mac['mac_address'])
+               mote_path = voyager.pathsApi.get_connections(mac['mac_address']).to_str()
+               mote_path = mote_path.replace("\n             ","")
+               json.dump(mote_path, file, indent=-8, default = myconverter)
+               #file.write(mote_path) # param str mac: MAC Address (required)
+               file.write("\n")
+
+        threading.Timer(60, period_call).start() # The first parameter is in seconds Ex: 600 = 10 minutes
+        print 'Period Call Finished ...'
+        # =================================================================
     
 ########## Process Notif ##########
 def process_notif(notif):
@@ -1009,6 +1038,8 @@ try:
     # initialize the VManager Python library
     voyager = VManagerApi(host=mgrhost)
 
+    fileLock = threading.RLock()
+    
     # Get the whole list of motes 
     mote_list = voyager.motesApi.get_motes()
 
