@@ -824,6 +824,16 @@ def period_call():
                #file.write(mote_path) # param str mac: MAC Address (required)
                file.write("\n")
 
+        # ======================== NetWork Statistics ========================
+        file.write('Time :' + time_str + '\n')
+        
+        # Get Network Statistics
+        file.write("network_statistics")
+        network_info = voyager.networkApi.get_network_info().to_str()
+        network_info = network_info.replace("\n","")
+        json.dump(network_info, file, indent=-4)
+        file.write("\n")
+        
         threading.Timer(60, period_call).start() # The first parameter is in seconds Ex: 600 = 10 minutes
         print 'Period Call Finished ...'
         # =================================================================
@@ -1043,7 +1053,7 @@ try:
     # Get the whole list of motes 
     mote_list = voyager.motesApi.get_motes()
 
-    file = open("json_numberOfPackets.json","w")
+    file = open("script_test.json","w")
     #with open(os.path.join('C:\INRIA-Victor\VManager\Scripts\smartmeshsdk\VManager Data',"teste.txt"), "w") as file:
     print 'Script Created Successfully !'
 
