@@ -2,9 +2,9 @@
 
 This repository cotains scripts to get some notifications and datas from the motes using the VManager API
 
-##Prerequisites
+**Prerequisites**
 -
-##Running a Script
+**Running a Script**
 
 To run scripts you should just to follow theses steps: 
 	
