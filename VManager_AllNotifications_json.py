@@ -1053,8 +1053,7 @@ try:
     # Get the whole list of motes 
     mote_list = voyager.motesApi.get_motes()
 
-    file = open("script_test.json","w")
-    #with open(os.path.join('C:\INRIA-Victor\VManager\Scripts\smartmeshsdk\VManager Data',"teste.txt"), "w") as file:
+    file = open(os.path.join('C:\INRIA-Victor\VManager\Scripts\smartmeshsdk\VManager_Data',"teste.txt"), "w")
     print 'Script Created Successfully !'
 
     # Start listening for data notifications
