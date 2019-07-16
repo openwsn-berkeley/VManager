@@ -16,4 +16,4 @@ To run scripts you should just to follow theses steps:
 	
 	`python script_name.py`
 	
-`
+
